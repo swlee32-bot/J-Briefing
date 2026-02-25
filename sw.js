@@ -1,4 +1,4 @@
-const CACHE_NAME = 'joint-briefing-v2'; // 버전을 v2로 올려서 옛날 캐시를 지웁니다.
+const CACHE_NAME = 'joint-briefing-v3'; // 버전을 v2로 올려서 옛날 캐시를 지웁니다.
 const ASSETS = [
     './',
     './index.html', 
@@ -61,4 +61,5 @@ self.addEventListener('fetch', event => {
                 });
             })
     );
+
 });
