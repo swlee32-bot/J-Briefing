@@ -1,7 +1,7 @@
 {
   "name": "Joint Briefing Checklist",
   "short_name": "Joint Briefing",
-  "start_url": "Joint Briefing v1.0.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f1f5f9",
   "theme_color": "#2563eb",
