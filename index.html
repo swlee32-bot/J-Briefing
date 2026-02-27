@@ -9,54 +9,133 @@
     <link rel="apple-touch-icon" href="icon.png">
     <style>
         :root {
+            /* ☀️ 주간 모드 (기본) 색상 변수 */
             --primary-color: #2563eb;
             --danger-color: #ef4444;
             --bg-color: #f1f5f9;
             --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --container-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --header-bg: #f8fafc;
+            --input-bg: #ffffff;
+            --input-border: #cbd5e0;
+            --input-readonly-bg: #f8fafc;
+            --crew-label-bg: #eff6ff;
+            --modal-overlay: rgba(0,0,0,0.6);
+            --dial-unselected: #cbd5e0;
+            --dial-separator: #64748b;
         }
 
-        /* 1. 폴드 커버화면 전용 고정 레이아웃 (가로 스크롤 완벽 차단, 상하 스크롤만 허용) */
+        /* 🌙 야간 모드 색상 변수 */
+        :root[data-theme="dark"] {
+            --primary-color: #3b82f6;
+            --danger-color: #f87171;
+            --bg-color: #0f172a;
+            --text-dark: #f8fafc;
+            --text-muted: #94a3b8;
+            --container-bg: #1e293b;
+            --border-color: #334155;
+            --header-bg: #0f172a;
+            --input-bg: #0f172a;
+            --input-border: #475569;
+            --input-readonly-bg: #1e293b;
+            --crew-label-bg: #1e293b;
+            --modal-overlay: rgba(0,0,0,0.8);
+            --dial-unselected: #475569;
+            --dial-separator: #94a3b8;
+        }
+
+        /* 기기 기본 설정 야간 모드 적용 */
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --primary-color: #3b82f6;
+                --danger-color: #f87171;
+                --bg-color: #0f172a;
+                --text-dark: #f8fafc;
+                --text-muted: #94a3b8;
+                --container-bg: #1e293b;
+                --border-color: #334155;
+                --header-bg: #0f172a;
+                --input-bg: #0f172a;
+                --input-border: #475569;
+                --input-readonly-bg: #1e293b;
+                --crew-label-bg: #1e293b;
+                --modal-overlay: rgba(0,0,0,0.8);
+                --dial-unselected: #475569;
+                --dial-separator: #94a3b8;
+            }
+        }
+
+        /* 1. 기본 레이아웃 (스크롤 방해 요소 제거) */
         html, body {
             overflow-x: hidden;
             width: 100%;
+            min-height: 100vh;
             margin: 0;
             padding: 0;
             background-color: var(--bg-color);
             font-family: 'Pretendard', -apple-system, sans-serif;
-            overscroll-behavior-y: none; 
+            /* overscroll-behavior-y: none;  <-- 🚨 스크롤 뻑뻑함의 주범! 삭제 완료 */
             -webkit-tap-highlight-color: transparent; 
+            color: var(--text-dark);
         }
         body {
             padding: 8px; 
             box-sizing: border-box;
         }
         .checklist-container {
-            background: white; 
+            background: var(--container-bg); 
             width: 100%; 
             padding: 15px 12px; 
             border-radius: 12px;
             box-sizing: border-box;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            position: relative; /* 토글 버튼의 기준점 */
+        }
+
+        /* 좌측 상단 테마 토글 버튼 */
+        .theme-toggle-btn {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            cursor: pointer;
+            z-index: 100;
+            transition: transform 0.2s, background-color 0.3s;
+            color: var(--text-dark);
+        }
+        .theme-toggle-btn:active {
+            transform: scale(0.9);
         }
 
         /* 2. 제목 및 섹션 컨테이너 */
         h1 {
             color: var(--text-dark); text-align: center; font-size: 1.2rem;
             margin-top: 5px; margin-bottom: 20px; border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 10px;
+            padding-bottom: 10px; padding-left: 30px; padding-right: 30px; /* 버튼과 겹치지 않게 여백 */
         }
         .section {
-            margin-bottom: 12px; border: 1px solid #e2e8f0;
+            margin-bottom: 12px; border: 1px solid var(--border-color);
             border-radius: 8px; overflow: hidden;
         }
         .section-header {
-            background-color: #f8fafc; padding: 10px 12px;
+            background-color: var(--header-bg); padding: 10px 12px;
             font-size: 0.95rem; font-weight: bold; color: var(--primary-color);
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid var(--border-color);
         }
         .content { padding: 12px; }
         
-        /* 3. 항목 위아래 배치 (커버화면 가로폭 100% 활용) */
+        /* 3. 항목 위아래 배치 */
         .row { 
             display: flex; 
             flex-direction: column; 
@@ -67,38 +146,38 @@
         
         label {
             width: 100%;
-            font-size: 0.85rem; color: #475569; font-weight: 700;
+            font-size: 0.85rem; color: var(--text-muted); font-weight: 700;
         }
         
-        /* 터치하기 편하도록 입력칸 크기 대폭 상향 */
         input[type="text"], input[type="tel"], select, input[readonly] {
-            width: 100%; border: 1px solid #cbd5e0; border-radius: 6px;
+            width: 100%; border: 1px solid var(--input-border); border-radius: 6px;
             padding: 12px 10px; 
-            font-size: 0.95rem; background-color: white;
+            font-size: 0.95rem; background-color: var(--input-bg); color: var(--text-dark);
             box-sizing: border-box;
             appearance: none;
         }
+        input::placeholder { color: #94a3b8; }
         input[readonly] {
-            background-color: #f8fafc; cursor: pointer; text-align: center;
+            background-color: var(--input-readonly-bg); cursor: pointer; text-align: center;
             color: var(--primary-color); font-weight: bold;
         }
 
-        /* 4. 편명/기번 등 짧은 항목은 반반(1:1) 그리드로 꽉 차게 배치 */
+        /* 4. 짧은 항목 그리드 배치 */
         .split-row { 
             display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; 
         }
         .split-item { display: flex; flex-direction: column; gap: 6px; }
         
-        /* 5. 다이얼 인풋 그룹 (시간, 고도) */
+        /* 5. 다이얼 인풋 그룹 */
         .picker-group { display: flex; align-items: center; gap: 8px; width: 100%; }
-        .separator { font-weight: bold; color: #64748b; }
+        .separator { font-weight: bold; color: var(--dial-separator); }
 
-        /* 6. 승무원 이름 입력 (2열 배치) */
+        /* 6. 승무원 이름 입력 */
         .crew-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .crew-column { display: flex; flex-direction: column; gap: 6px; }
         .crew-label {
             text-align: center; font-size: 0.85rem; font-weight: bold; color: var(--primary-color);
-            margin-bottom: 2px; background: #eff6ff; padding: 6px; border-radius: 4px;
+            margin-bottom: 2px; background: var(--crew-label-bg); padding: 6px; border-radius: 4px;
         }
 
         /* 7. 하단 버튼 */
@@ -109,18 +188,18 @@
         }
         .btn-reset { background-color: var(--danger-color); color: white; }
         .btn:active { transform: scale(0.96); opacity: 0.8; }
-        .footer { text-align: center; margin-top: 20px; font-size: 0.75rem; color: #94a3b8; padding-bottom: 20px; }
+        .footer { text-align: center; margin-top: 20px; font-size: 0.75rem; color: var(--text-muted); padding-bottom: 20px; }
 
         /* =========================================
            [다이얼(Wheel) 모달 전용 CSS]
            ========================================= */
         .dial-modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center;
+            background: var(--modal-overlay); z-index: 2000; justify-content: center; align-items: center;
             backdrop-filter: blur(2px);
         }
         .dial-modal-content {
-            background: white; width: 90%; max-width: 320px; border-radius: 16px; padding: 20px;
+            background: var(--container-bg); width: 90%; max-width: 320px; border-radius: 16px; padding: 20px;
             box-sizing: border-box; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             animation: modalPop 0.2s ease-out;
         }
@@ -131,8 +210,8 @@
         .dial-modal-content h3 { margin: 0 0 15px 0; font-size: 1.1rem; color: var(--primary-color); }
         .dial-container {
             position: relative; display: flex; justify-content: center; align-items: center;
-            height: 150px; overflow: hidden; background: #f8fafc; border-radius: 8px;
-            border: 1px solid #e2e8f0; margin-bottom: 15px;
+            height: 150px; overflow: hidden; background: var(--header-bg); border-radius: 8px;
+            border: 1px solid var(--border-color); margin-bottom: 15px;
         }
         .dial-col {
             flex: 1; height: 100%; overflow-y: auto; scroll-snap-type: y mandatory;
@@ -141,10 +220,11 @@
         .dial-col::-webkit-scrollbar { display: none; } 
         .dial-item {
             height: 50px; display: flex; justify-content: center; align-items: center;
-            font-size: 1.3rem; font-weight: bold; color: #cbd5e0; scroll-snap-align: center;
+            font-size: 1.3rem; font-weight: bold; color: var(--dial-unselected); scroll-snap-align: center;
             transition: color 0.1s;
         }
-        .dial-separator { font-size: 1.3rem; font-weight: bold; padding: 0 5px; z-index: 2; color: #64748b; }
+        .dial-item.selected { color: var(--primary-color) !important; } /* 테마에 맞게 CSS 클래스로 선택 처리 */
+        .dial-separator { font-size: 1.3rem; font-weight: bold; padding: 0 5px; z-index: 2; color: var(--dial-separator); }
         .dial-highlight {
             position: absolute; top: 50px; left: 0; width: 100%; height: 50px;
             background: rgba(37, 99, 235, 0.08); border-top: 2px solid var(--primary-color);
@@ -157,6 +237,7 @@
 
 <form id="briefingForm">
 <div class="checklist-container">
+    <button type="button" class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()">🌙</button>
     <h1>🤝 JOINT BRIEFING</h1>
 
     <div class="section">
@@ -296,7 +377,7 @@
             <div class="dial-highlight"></div>
         </div>
         <div class="dial-btn-group">
-            <button type="button" class="btn" style="background:#cbd5e0; color:#1e293b;" onclick="closeDialModal('time')">취소</button>
+            <button type="button" class="btn" style="background:var(--border-color); color:var(--text-dark);" onclick="closeDialModal('time')">취소</button>
             <button type="button" class="btn" style="background:var(--primary-color); color:white;" onclick="confirmDialModal('time')">확인</button>
         </div>
     </div>
@@ -312,7 +393,7 @@
             <div class="dial-highlight"></div>
         </div>
         <div class="dial-btn-group">
-            <button type="button" class="btn" style="background:#cbd5e0; color:#1e293b;" onclick="closeDialModal('alt')">취소</button>
+            <button type="button" class="btn" style="background:var(--border-color); color:var(--text-dark);" onclick="closeDialModal('alt')">취소</button>
             <button type="button" class="btn" style="background:var(--primary-color); color:white;" onclick="confirmDialModal('alt')">확인</button>
         </div>
     </div>
@@ -323,7 +404,39 @@
     const form = document.getElementById('briefingForm');
     const DIAL_ITEM_HEIGHT = 50; 
 
+    // --- 주야간 테마 관리 기능 ---
+    function setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('jointBriefingTheme', theme);
+        const themeBtn = document.getElementById('themeToggleBtn');
+        if (themeBtn) {
+            themeBtn.innerText = theme === 'dark' ? '☀️' : '🌙';
+        }
+    }
+
+    function toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 
+                             (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        setTheme(newTheme);
+    }
+
+    function initTheme() {
+        const savedTheme = localStorage.getItem('jointBriefingTheme');
+        if (savedTheme) {
+            setTheme(savedTheme);
+        } else {
+            const isSystemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const themeBtn = document.getElementById('themeToggleBtn');
+            if (themeBtn) {
+                themeBtn.innerText = isSystemDark ? '☀️' : '🌙';
+            }
+        }
+    }
+
     function init() {
+        initTheme(); // 테마 초기화 호출
+
         createDialItems('dial-hours', 0, 16, 1, v => String(v).padStart(2, '0') + 'h');
         createDialItems('dial-mins', 0, 55, 5, v => String(v).padStart(2, '0') + 'm');
         createDialItems('dial-alt1', 250, 410, 10, v => 'FL' + v);
@@ -354,8 +467,10 @@
         container.addEventListener('scroll', () => {
             let idx = Math.round(container.scrollTop / DIAL_ITEM_HEIGHT) + 1;
             let items = container.querySelectorAll('.dial-item');
-            items.forEach(el => el.style.color = '#cbd5e0');
-            if(items[idx]) items[idx].style.color = 'var(--primary-color)';
+            
+            // 인라인 스타일 대신 클래스를 제어하여 다크모드 대응
+            items.forEach(el => el.classList.remove('selected'));
+            if(items[idx]) items[idx].classList.add('selected');
         });
     }
 
@@ -434,8 +549,6 @@
             localStorage.removeItem(STORAGE_KEY);
             form.reset();
             
-            // 🚨 원인이었던 .value 강제 주입 코드를 전부 삭제했습니다!
-            // 이제 리셋 시 빈칸이 되며, HTML에 적어둔 placeholder 힌트가 자연스럽게 나타납니다.
             document.getElementById('fltHours').value = "";
             document.getElementById('fltMins').value = "";
             document.getElementById('altInitial').value = "";
@@ -452,7 +565,6 @@
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('sw.js')
-                .then(reg => console.log('SW 등록 성공!', reg.scope))
                 .catch(err => console.log('SW 등록 실패:', err));
         });
     }
