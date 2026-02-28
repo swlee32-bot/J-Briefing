@@ -262,12 +262,12 @@
     </div>
 
     <div class="section">
-        <div class="section-header">기본정보</div>
+        <div class="section-header">Basic Information</div>
         <div class="content">
             <div class="split-row" style="margin-bottom: 12px;">
-                <div class="split-item"><label>편명</label><input type="tel" name="fltNo" placeholder="Flight No." inputmode="numeric"></div>
+                <div class="split-item"><label>Flt No</label><input type="tel" name="fltNo" placeholder="Flight No." inputmode="numeric"></div>
                 <div class="split-item">
-                    <label>기번</label>
+                    <label>Reg</label>
                     <select name="tailNo">
                         <option value="">선택</option>
                         <option value="HL8387">HL8387</option>
@@ -283,25 +283,25 @@
                 </div>
             </div>
             <div class="split-row">
-                <div class="split-item"><label>Dep.G</label><input type="text" name="depGate" placeholder="Dep. Gate"></div>
-                <div class="split-item"><label>Arr.G</label><input type="text" name="arrGate" placeholder="Arr. Gate"></div>
+                <div class="split-item"><label>Dep.Gate</label><input type="text" name="depGate" placeholder="Dep. Gate"></div>
+                <div class="split-item"><label>Arr.Gate</label><input type="text" name="arrGate" placeholder="Arr. Gate"></div>
             </div>
         </div>
     </div>
 
     <div class="section">
-        <div class="section-header">비행정보 (다이얼 선택)</div>
+        <div class="section-header">Flight Information</div>
         <div class="content">
             <div class="row">
-                <label>비행시간</label>
+                <label>Flight Time</label>
                 <div class="picker-group">
-                    <input type="text" id="fltHours" name="fltHours" readonly placeholder="00h" onclick="openDialModal('time')">
-                    <span class="separator">:</span>
-                    <input type="text" id="fltMins" name="fltMins" readonly placeholder="00m" onclick="openDialModal('time')">
+                    <input type="text" id="fltHours" name="fltHours" readonly placeholder="00" onclick="openDialModal('time')">
+                    <span class="separator">+</span>
+                    <input type="text" id="fltMins" name="fltMins" readonly placeholder="00C" onclick="openDialModal('time')">
                 </div>
             </div>
             <div class="row">
-                <label>순항고도</label>
+                <label>Cruise Level</label>
                 <div class="picker-group">
                     <input type="text" id="altInitial" name="altInitial" readonly placeholder="FL250" onclick="openDialModal('alt')">
                     <span class="separator">~</span>
@@ -312,31 +312,31 @@
     </div>
 
     <div class="section">
-        <div class="section-header">날씨정보</div>
+        <div class="section-header">Weather Information</div>
         <div class="content">
-            <div class="row"><label>출발공항</label><input type="text" name="wxDep" placeholder="Departure WX"></div>
-            <div class="row"><label>도착공항</label><input type="text" name="wxArr" placeholder="Destination WX"></div>
-            <div class="row"><label>항로난기류</label><input type="text" name="wxRoute" placeholder="En-route WX"></div>
+            <div class="row"><label>Dep.Airport</label><input type="text" name="wxDep" placeholder="Departure WX"></div>
+            <div class="row"><label>Arr.Airport</label><input type="text" name="wxArr" placeholder="Destination WX"></div>
+            <div class="row"><label>Turbulence Information</label><input type="text" name="wxRoute" placeholder="En-route WX"></div>
         </div>
     </div>
 
     <div class="section">
-        <div class="section-header">절차</div>
+        <div class="section-header">Procedures</div>
         <div class="content">
             <div class="row">
-                <label>조종실출입절차</label>
+                <label>Cockpit Entry</label>
                 <input type="text" name="proc_entry" id="proc_entry" placeholder="인터폰, 커튼, 청정구역확인, 1E">
             </div>
             <div class="row">
-                <label>STERILE COCKPIT</label>
+                <label>Sterile Cockpit</label>
                 <input type="text" name="proc_sterile" id="proc_sterile" placeholder="PILOT ALERT - 별표 2번">
             </div>
             <div class="row">
-                <label>이륙단념</label>
+                <label>Rejected TO</label>
                 <input type="text" name="proc_rto" id="proc_rto" placeholder="Attention Crew at Station, Remain Seated">
             </div>
             <div class="row">
-                <label>비상시 조종실 연락</label>
+                <label>Contacting Cockpit under Emengency Condition</label>
                 <input type="text" name="proc_emer" id="proc_emer" placeholder="비상벨 3회">
             </div>
             <div class="row">
@@ -347,19 +347,19 @@
     </div>
 
     <div class="section">
-        <div class="section-header">기타정보</div>
+        <div class="section-header">Other Information</div>
         <div class="content">
-            <div class="row"><label>특별승객</label><input type="text" name="etc_spax" placeholder="SPCP, VIP 등"></div>
-            <div class="row"><label>객실관련 MEL</label><input type="text" name="etc_mel" placeholder="Cabin related MEL"></div>
+            <div class="row"><label>Special Information</label><input type="text" name="etc_spax" placeholder="SPCP, VIP 등"></div>
+            <div class="row"><label>Cabin Related MEL</label><input type="text" name="etc_mel" placeholder="Cabin related MEL"></div>
             <div class="row">
-                <label>확인사항</label>
+                <label>Others</label>
                 <input type="text" name="etc_confirm" id="etc_confirm" placeholder="건강상태, SHOWUP, 증명서">
             </div>
         </div>
     </div>
 
     <div class="button-group">
-        <button type="button" class="btn btn-reset" onclick="resetChecklist()">리셋 (초기화)</button>
+        <button type="button" class="btn btn-reset" onclick="resetChecklist()">Reset All</button>
     </div>
 
     <div class="footer">
