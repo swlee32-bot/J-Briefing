@@ -297,7 +297,7 @@
                 <div class="picker-group">
                     <input type="text" id="fltHours" name="fltHours" readonly placeholder="00" onclick="openDialModal('time')">
                     <span class="separator">+</span>
-                    <input type="text" id="fltMins" name="fltMins" readonly placeholder="00C" onclick="openDialModal('time')">
+                    <input type="text" id="fltMins" name="fltMins" readonly placeholder="00" onclick="openDialModal('time')">
                 </div>
             </div>
             <div class="row">
@@ -373,7 +373,7 @@
         <h3>비행시간 설정</h3>
         <div class="dial-container">
             <div class="dial-col" id="dial-hours"></div>
-            <div class="dial-separator">:</div>
+            <div class="dial-separator">+</div>
             <div class="dial-col" id="dial-mins"></div>
             <div class="dial-highlight"></div>
         </div>
@@ -438,8 +438,8 @@
     function init() {
         initTheme(); // 테마 초기화 호출
 
-        createDialItems('dial-hours', 0, 16, 1, v => String(v).padStart(2, '0') + 'h');
-        createDialItems('dial-mins', 0, 55, 5, v => String(v).padStart(2, '0') + 'm');
+        createDialItems('dial-hours', 0, 16, 1, v => String(v).padStart(2, '0'));
+        createDialItems('dial-mins', 0, 55, 5, v => String(v).padStart(2, '0'));
         createDialItems('dial-alt1', 250, 410, 10, v => 'FL' + v);
         createDialItems('dial-alt2', 250, 410, 10, v => 'FL' + v);
 
@@ -478,8 +478,8 @@
     function openDialModal(type) {
         if(type === 'time') {
             document.getElementById('timeModal').style.display = 'flex';
-            setDialScroll('dial-hours', document.getElementById('fltHours').value || '00h');
-            setDialScroll('dial-mins', document.getElementById('fltMins').value || '00m');
+            setDialScroll('dial-hours', document.getElementById('fltHours').value || '00');
+            setDialScroll('dial-mins', document.getElementById('fltMins').value || '00');
         } else if (type === 'alt') {
             document.getElementById('altModal').style.display = 'flex';
             setDialScroll('dial-alt1', document.getElementById('altInitial').value || 'FL250');
