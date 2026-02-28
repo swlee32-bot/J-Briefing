@@ -1,4 +1,4 @@
-const CACHE_NAME = 'joint-briefing-v6'; 
+const CACHE_NAME = 'joint-briefing-v7'; 
 const ASSETS = [
   './',
   './index.html', 
@@ -95,4 +95,5 @@ self.addEventListener('fetch', event => {
     })()
   );
 });
+
 
